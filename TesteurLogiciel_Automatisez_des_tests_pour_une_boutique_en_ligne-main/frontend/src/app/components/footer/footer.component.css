@@ -1,0 +1,8 @@
+footer#main-footer {
+  background-color: #43584E;
+  padding: 43px 57px;
+}
+footer#main-footer #footer-logo img {
+  width: 300px;
+  max-width: 100%;
+}/*# sourceMappingURL=footer.component.css.map */
