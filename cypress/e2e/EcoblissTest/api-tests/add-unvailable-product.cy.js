@@ -26,12 +26,14 @@ it("Add product", () => {
                 Authorization: `Bearer ${Token}` // Ajoutez le token dans les en-têtes
             },
             body: {
-                product: 5,
-                quantity: 6
+                product: 3,
+                quantity: 2
             },
         }).then((response) => {
-            expect(response.status).to.eq(200); // Vérifiez que l'ajout a réussi
-            cy.log('Product added successfully', response);
+            expect(response.status).to.eq(406); // Vérifiez que l'ajout n'a pas réussi
+            cy.log('The product is unvailable in stock', response);
         });
     });
+
+    
 });
