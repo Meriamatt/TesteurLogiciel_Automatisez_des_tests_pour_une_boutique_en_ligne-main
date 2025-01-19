@@ -9,20 +9,20 @@ before(() => {
         username: "test2@test.fr",
         password: "testtest",
     }).then((response) => {
-        expect(response.status).to.eq(200); // Vérifiez que la requête a réussi
-        Token = response.body.token; // Stockez le token
+        expect(response.status).to.eq(200); 
+        Token = response.body.token; 
     });
 });
 it("Add product", () => {
    
     
-    // Vérifiez que le token est disponible
+    
     cy.wrap(Token).should('not.be.undefined').then(() => {
         cy.request({
             method: "POST",
             url: `${apiUrl}/reviews`,
             headers: {
-                Authorization: `Bearer ${Token}` // Ajoutez le token dans les en-têtes
+                Authorization: `Bearer ${Token}` 
             },
             body: {
                 "title": "premier avis",
@@ -30,8 +30,31 @@ it("Add product", () => {
                 "rating": 5
             },
         }).then((response) => {
-            expect(response.status).to.eq(200); // Vérifiez que l'ajout a réussi
+            expect(response.status).to.eq(200); 
             cy.log('review added successfully', response);
+        });
+    });
+});
+
+it("Test XSS injection in comment", () => {
+   
+    
+    cy.wrap(Token).should('not.be.undefined').then(() => {
+        cy.request({
+            method: "POST",
+            url: `${apiUrl}/reviews`,
+            headers: {
+                Authorization: `Bearer ${Token}` 
+            },
+            body: {
+                "title": "premier avis",
+                "comment": "<script>alert('XSS')</script>",
+                "rating": 5
+            },
+        }).then((response) => {
+            expect(response.status).to.eq(200); 
+            cy.log(response);
+            expect(response.body.comment).to.not.include("<script>");
         });
     });
 });
