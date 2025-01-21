@@ -5,23 +5,26 @@ let Token;
 before(() => {
     cy.log('Test login');
     cy.request({
+        // Requête POST à l'API pour effectuer une connexion avec un identifiant inexistant
         method: "POST",
         url: `${apiUrl}/login`,
         body: {
             username: "meriam@test.fr",
             password: "testtest",
         },
-        failOnStatusCode: false // Permet de gérer manuellement les statuts non 2xx
+        // Empêche Cypress d'échouer automatiquement pour un statut HTTP autre que 200 
+        failOnStatusCode: false 
     }).then((response) => {
-        expect(response.status).to.eq(401); // Vérifiez que la requête a échoué
-        Token = response.body.token; // Stockez le token
+
+        // Vérification que la réponse de l'API a un statut HTTP 401 (non autorisé)
+        expect(response.status).to.eq(401); 
+        Token = response.body.token; 
     });
 });
 
 it("Add product", () => {
     cy.log('Post request to add product');
-    
-    // Vérifiez que le token est disponible
+    // Requête PUT à l'API pour ajouter un produit au panier
     cy.wrap(Token).then(() => {
         cy.request({
             method: "PUT",
@@ -35,7 +38,7 @@ it("Add product", () => {
             },
             failOnStatusCode: false,
         }).then((response) => {
-            expect(response.status).to.eq(401); 
+             expect(response.status).to.eq(401); 
             
         });
     });

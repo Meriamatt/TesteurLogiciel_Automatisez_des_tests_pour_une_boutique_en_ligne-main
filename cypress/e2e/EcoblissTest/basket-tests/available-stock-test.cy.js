@@ -5,25 +5,37 @@ describe('available product in stock', () => {
       cy.get("[data-cy='login-input-username']").should('be.visible').type('test2@test.fr');
       cy.get("[data-cy='login-input-password']").should('be.visible').type('testtest');
       cy.get("[data-cy='login-submit']").click();
-      cy.wait(5000);
       cy.get("[data-cy='nav-link-cart']").should('be.visible').click();
       cy.get("[data-cy='cart-line-delete']").click({ multiple: true });
       cy.get("[data-cy='nav-link-products']").click();
-      cy.get("[data-cy='product-link']").eq(2).click();
-      cy.wait(5000);
+      cy.get("[data-cy='product-link']").eq(2).should('be.visible').click();
+      cy.url().should('include', '/products/5');
+
       
       cy.get("[data-cy='detail-product-stock']")
-  .invoke('text') // Récupère le texte de l'élément
+      .should('be.visible')
+      // Récupère le texte de l'élément
+      .invoke('text') 
+      .should((text) => {
+        // Vérifie qu'il y a au moins un chiffre dans le texte
+       expect(text).to.match(/\d+/); 
+      })
   .then((text) => {
-    const numberInText = parseInt(text.match(/\d+/)[0], 10); // Extrait le nombre
-    expect(numberInText).to.be.greaterThan(1); // Vérifie que le nombre est supérieur à 1
+    // Extrait le nombre
+    const numberInText = parseInt(text.match(/\d+/)[0], 10); 
+    // Vérifie que le nombre est supérieur à 1
+    expect(numberInText).to.be.greaterThan(1); 
     cy.log(numberInText);
     cy.get("[data-cy='detail-product-add']").click();
-      cy.wait(5000);
+    cy.url().should('include', '/cart');
       cy.go('back');
-      cy.wait(5000);
+      cy.url().should('include', '/products/5');
       cy.get("[data-cy='detail-product-stock']")
   .invoke('text') 
+  .should((text) => {
+    
+   expect(text).to.match(/\d+/); 
+  })
   .then((text) => {
     const numberUpdated = parseInt(text.match(/\d+/)[0], 10); 
     expect(numberUpdated).to.eq(numberInText-1);//be.lessThan(numberInText); 
