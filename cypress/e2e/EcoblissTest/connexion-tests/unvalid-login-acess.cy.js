@@ -1,6 +1,8 @@
+const localUrl = Cypress.env("localUrl");
+
 describe('unvalid login', () => {
     it('passes', () => {
-      cy.visit('http://localhost:8080');
+      cy.visit(localUrl);
       cy.get("[data-cy='nav-link-login']").click();
       cy.get("[data-cy='login-input-username']").type('testtest2@test.fr');
       cy.get("[data-cy='login-input-password']").type('testtest');

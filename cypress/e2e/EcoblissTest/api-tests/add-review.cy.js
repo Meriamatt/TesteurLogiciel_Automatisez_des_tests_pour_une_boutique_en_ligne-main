@@ -14,7 +14,8 @@ before(() => {
     });
 });
 it("Add review", () => {
-   
+    // Requête POST à l'API pour ajouter un avis
+
     cy.wrap(Token).should('not.be.undefined').then(() => {
         cy.request({
             method: "POST",
@@ -33,6 +34,7 @@ it("Add review", () => {
         });
     });
 });
+// vérification de la protection CSRF en envoyant un lien externe par le header de la requête 
 it("Test CSRF protection", () => {
    
         cy.request({
@@ -49,7 +51,7 @@ it("Test CSRF protection", () => {
             },
             failOnStatusCode: false
         }).then((response) => {
-            expect(response.status).to.not.equal(200); 
+            expect(response.status).to.be.oneOf([401, 403]); 
             
         });
    

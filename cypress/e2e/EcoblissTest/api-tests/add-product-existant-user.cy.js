@@ -13,15 +13,15 @@ before(() => {
         password: "testtest",
     }).then((response) => {
         // Vérification que la réponse de l'API a un statut HTTP 200 (succès)
-        expect(response.status).to.eq(200); 
+        expect(response.status).to.eq(200);
         // Stockage du token d'authentification renvoyé dans la réponse
-        Token = response.body.token; 
+        Token = response.body.token;
     });
 });
 
 it("Add product", () => {
     cy.log('Post request to add product');
-    
+
     // Vérifie que la variable 'Token' n'est pas indéfinie avant d'exécuter la requête
     cy.wrap(Token).should('not.be.undefined').then(() => {
 
@@ -30,16 +30,46 @@ it("Add product", () => {
             method: "PUT",
             url: `${apiUrl}/orders/add`,
             headers: {
-                Authorization: `Bearer ${Token}` 
+                Authorization: `Bearer ${Token}`
             },
             body: {
                 product: 5,
                 quantity: 6
             },
         }).then((response) => {
-            expect(response.status).to.eq(200); 
+            expect(response.status).to.eq(200);
             cy.log('Product added successfully', response);
         });
     });
-    
+
 });
+it("validate user information", () => {
+
+    
+    cy.wrap(Token).should('not.be.undefined').then(() => {
+
+        cy.request({
+            method: "POST",
+            url: `${apiUrl}/orders`,
+            headers: {
+                Authorization: `Bearer ${Token}`
+            },
+            body: {
+                
+                    "firstname": "meriam",
+                    "lastname": "Ben",
+                    "address": "<script>alert('XSS')</script>",
+                    "zipCode": "95870",
+                    "city": "Bezons"
+                  },
+                  failOnStatusCode: false
+        }).then((response) => {
+            cy.log(response);
+            expect(response.status).to.eq(200);
+            cy.log(response);
+            expect(response.body.address).to.not.include("<script>");
+        });
+    });
+
+});
+
