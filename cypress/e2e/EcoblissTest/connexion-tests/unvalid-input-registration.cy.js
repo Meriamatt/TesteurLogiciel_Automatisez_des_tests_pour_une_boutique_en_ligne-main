@@ -1,13 +1,12 @@
-import { faker } from '@faker-js/faker'; //n’oubliez jamais l’import, qui est nécessaire
+import { faker } from '@faker-js/faker'; 
 
 const localUrl = Cypress.env("localUrl");
-const fakeEmail = faker.internet.email();
 const fakePassword = faker.internet.password({ length: 20 });
 const fakefirstname = faker.person.firstName();
 const fakelastname = faker.person.lastName();
 
 
-
+//Test d'inscription avec un email invalide (caractères spéciaux)
 describe('registration', () => {
     it('passes', () => {
       cy.visit(localUrl);
@@ -18,6 +17,7 @@ describe('registration', () => {
       cy.get("[data-cy='register-input-password']").type(fakePassword);
       cy.get("[data-cy='register-input-password-confirm']").type(fakePassword);
       cy.get("[data-cy='register-submit']").click();
+      //Vérification de l'affichage du message d'erreur
       cy.get("[data-cy='register-errors']").should('be.visible');
     })
   

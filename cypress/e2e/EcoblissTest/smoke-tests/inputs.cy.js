@@ -1,7 +1,8 @@
 const loginUrl = `${Cypress.env("localUrl")}/#/login`;
 
 
-describe('template spec', () => {
+//Test de vérification de la présence de certains élément dans la page
+describe('elements should exist', () => {
   it('passes', () => {
     cy.visit(loginUrl);
     cy.get("[data-cy='login-input-username']").should('be.visible').type('mer.ben@gmail.com');

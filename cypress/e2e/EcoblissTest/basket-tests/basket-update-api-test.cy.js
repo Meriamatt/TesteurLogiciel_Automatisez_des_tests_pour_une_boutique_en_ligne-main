@@ -5,7 +5,10 @@ const localUrl = Cypress.env("localUrl");
 let Token;
 
 
+// Tests des produits disponibles en stock
 describe('available product in stock', () => {
+
+  //test de connexion et d'ajout d'un produit au panier
     it('passes', () => {
       cy.visit(localUrl);
       cy.get("[data-cy='nav-link-login']").click();
@@ -20,7 +23,8 @@ describe('available product in stock', () => {
    
       })
 
-      it('should get product list from API', () => {
+  //Test de récupération des produits via l'API
+    it('should get product list from API', () => {
         cy.request("POST", apiUrl + "/login", {
           "username": "test2@test.fr",
           "password": "testtest",
